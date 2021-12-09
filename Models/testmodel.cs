@@ -1,11 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace  WebApi.Models
+namespace WebApi.Models
 {
     public class testmodel
-        {
-            public class SLBAdminUser
+    {
+        public class SLBAdminUser
         {
             [Key]
             public int Id { get; set; }
@@ -24,6 +24,6 @@ namespace  WebApi.Models
             public DateTime? LastUpdated { get; set; }
         }
 
-        }
+    }
 
 }

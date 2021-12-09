@@ -30,6 +30,7 @@ namespace WebApi
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuth, Auth>();
 
             var configurationSection = Configuration.GetSection("con:dbcon");
             services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(configurationSection.Value));

@@ -1,7 +1,8 @@
 
+using IntergrationA.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace  WebApi
+namespace WebApi
 {
     public class DataBaseContext : DbContext
     {
@@ -9,6 +10,8 @@ namespace  WebApi
             : base(options)
         { }
 
-          public DbSet<WebApi.Models.testmodel.SLBAdminUser> SLBAdminUser { get; set; }
+        public DbSet<WebApi.Models.testmodel.SLBAdminUser> SLBAdminUser { get; set; }
+        public DbSet<settings> Settings { get; set; }
+        public DbSet<userinfoschema> userinfoschema { get; set; }
     }
 }

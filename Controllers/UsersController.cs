@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using IntergrationA.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApi.Models;
 using WebApi.Services;
@@ -13,27 +15,12 @@ namespace WebApi.Controllers
         private IUserService _userService;
         private ILogger<UsersController> userlog;
 
-        public UsersController(IUserService userService,ILogger<UsersController> _userlog)
+        public UsersController(IUserService userService, ILogger<UsersController> _userlog)
         {
             _userService = userService;
-            userlog=_userlog;
-            
+            userlog = _userlog;
+
         }
-
-
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate(AuthenticateRequest model)
-        {
-            userlog.LogInformation("Authenticate is called ");
-            userlog.LogError("Authenticate is called ");
-            var response = _userService.Authenticate(model);
-
-            if (response == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            return Ok(response);
-        }
-
         [Authorize]
         [HttpGet]
         public IActionResult GetAll()
@@ -49,6 +36,23 @@ namespace WebApi.Controllers
         {
             var users = _userService.GetUsers();
             return Ok(users);
+        }
+
+        [Route("addadminuser")]
+        [Authorize]
+        [HttpPost]
+        public ActionResult adminusers([FromBody] List<userinfoschema> usersinfo)
+        {
+            var users = _userService.postuser(usersinfo);
+            if (users)
+            {
+                return Ok(users);
+            }
+            else
+            {
+                return NoContent();
+            }
+
         }
     }
 }
