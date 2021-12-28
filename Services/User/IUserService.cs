@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using IntergrationA.Models;
 using WebApi.Entities;
 using WebApi.Models;
@@ -10,7 +11,7 @@ public interface IUserService
         IEnumerable<User> GetAll();
         IEnumerable<SLBAdminUser> GetUsers();
 
-        User GetById(int id);
+        Task<User> GetbyName(string id);
 //test user model 
       bool postuser(List<userinfoschema> userinfoschemas);
 

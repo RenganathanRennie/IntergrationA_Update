@@ -44,16 +44,15 @@ namespace WebApi.Services
         public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
         { 
 
-            using(DataBaseContext db = _dbcon)
-            {
-            var user = await Task.Run(()=> db.userinfoschema.Where(k=>k.name==model.Username && k.password==model.Password).FirstOrDefault());
+             
+            var user = await Task.Run(()=> _dbcon.userinfoschema.Where(k=>k.name==model.Username && k.password==model.Password).FirstOrDefault());
             if (user == null) return null;
 
             // authentication successful so generate jwt token
             var token = await generateJwtToken(user.name);
 
             return new AuthenticateResponse(user.name, token);
-            }
+             
         }
 
 
@@ -64,24 +63,21 @@ namespace WebApi.Services
         {
             // generate token that is valid for 7 days
 
-            using (DataBaseContext con = _dbcon)
-            {
+                 // get token expiry 
 
-                // get token expiry 
-
-                var expirytime =await Task.Run(()=> Convert.ToInt32(con.Settings.Where(x => x.settingsId == "set001").Select(v => v.settingsValue).FirstOrDefault()));
+                var expirytime =await Task.Run(()=> Convert.ToInt32(_dbcon.Settings.Where(x => x.settingsId == "set001").Select(v => v.settingsValue).FirstOrDefault()));
                 _authlog.LogInformation(" expiry time " + expirytime.ToString());
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new[] { new Claim("id",userid) }),
-                    Expires = DateTime.UtcNow.AddMinutes(expirytime),
+                    Expires = DateTime.UtcNow.AddHours(expirytime),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 return new string[]{tokenHandler.WriteToken(token),token.ValidFrom.ToLocalTime().ToString(),token.ValidTo.ToLocalTime().ToString()};
-            }
+           
         }
     }
 }

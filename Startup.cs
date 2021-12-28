@@ -8,6 +8,8 @@ using WebApi.Services;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using WebApi;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using IntergrationA.Services.TaskService;
 
 namespace WebApi
 {
@@ -25,12 +27,42 @@ namespace WebApi
         {
             services.AddCors();
             services.AddControllers();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "My API",
+        Version = "v1"
+    });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please insert JWT with Bearer into field",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+   {
+     new OpenApiSecurityScheme
+     {
+       Reference = new OpenApiReference
+       {
+         Type = ReferenceType.SecurityScheme,
+         Id = "Bearer"
+       }
+      },
+      new string[] { }
+    }
+  });
+});
+
             // configure strongly typed settings object
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuth, Auth>();
+            services.AddHostedService<RunAsyncTask>();
+
 
             var configurationSection = Configuration.GetSection("con:dbcon");
             services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(configurationSection.Value));
@@ -38,7 +70,7 @@ namespace WebApi
 
         // configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
-        { 
+        {
             loggerFactory.AddFile("Logs/IntegrationAPILog-{Date}.txt");
             app.UseSwagger();
             app.UseSwaggerUI();

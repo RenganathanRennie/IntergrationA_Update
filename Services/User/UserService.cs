@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Models;
@@ -26,10 +27,6 @@ namespace WebApi.Services
     public class UserService : IUserService
     {
         // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private List<User> _users = new List<User>
-        {
-            new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
-        };
 
         private readonly AppSettings _appSettings;
         private readonly DataBaseContext _dbcon;
@@ -56,7 +53,7 @@ namespace WebApi.Services
 
         public IEnumerable<User> GetAll()
         {
-            return _users;
+            return null;
         }
 
         public IEnumerable<SLBAdminUser> GetUsers()
@@ -67,9 +64,26 @@ namespace WebApi.Services
 
         }
 
-        public User GetById(int id)
+        public async Task<User> GetbyName(string id)
         {
-            return _users.FirstOrDefault(x => x.Id == id);
+            var user = new User();
+            try
+            {
+                var getuser = await Task.Run(() => _dbcon.userinfoschema.Where(o => o.name.ToLower() == id.ToLower()).FirstOrDefault());
+                if (getuser != null)
+                {
+                    user.FirstName = getuser.name;
+                    user.LastName = getuser.name;
+                    user.Username = getuser.name;
+                }
+            }
+            catch (Exception ex)
+            {
+                _userservicelog.LogError(ex.Message);
+                _userservicelog.LogError(ex.Source);
+            }
+
+            return user;
         }
 
         public bool postuser(List<userinfoschema> userinfoschemas)
@@ -77,13 +91,8 @@ namespace WebApi.Services
             bool result = false;
             try
             {
-                using (DataBaseContext db = _dbcon)
-                {
-                    //using block automaticall rollback the transaction no need to call rollback commit at the end of the statement #Renga
-
-                    db.userinfoschema.AddRangeAsync(userinfoschemas);
-                    db.SaveChangesAsync();
-                }
+                    _dbcon.userinfoschema.AddRangeAsync(userinfoschemas);
+                    _dbcon.SaveChangesAsync();
             }
             catch (Exception ex)
             {
