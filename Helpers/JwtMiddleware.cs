@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -14,11 +15,13 @@ namespace WebApi.Helpers
     {
         private readonly RequestDelegate _next;
         private readonly AppSettings _appSettings;
+        private readonly ILogger<JwtMiddleware> _log;
 
-        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
+        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings,ILogger<JwtMiddleware> _log)
         {
             _next = next;
             _appSettings = appSettings.Value;
+            this._log=_log;
         }
 
         public async Task Invoke(HttpContext context, IUserService userService)
@@ -26,12 +29,12 @@ namespace WebApi.Helpers
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                attachUserToContext(context, userService, token);
+               await attachUserToContext(context, userService, token);
 
             await _next(context);
         }
 
-        private void attachUserToContext(HttpContext context, IUserService userService, string token)
+        private async Task attachUserToContext(HttpContext context, IUserService userService, string token)
         {
             try
             {
@@ -48,15 +51,18 @@ namespace WebApi.Helpers
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+                var test =jwtToken.Claims.First(x => x.Type == "id").Value;
+                //var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
                 // attach user to context on successful jwt validation
-                context.Items["User"] = userService.GetById(userId);
+               // context.Items["User"] = userService.GetById(userId);
+           context.Items["User"]=await userService.GetbyName(test.ToString());
             }
-            catch
+            catch(Exception ex)
             {
                 // do nothing if jwt validation fails
                 // user is not attached to context so request won't have access to secure routes
+                _log.LogError(ex.Message);
             }
         }
     }
