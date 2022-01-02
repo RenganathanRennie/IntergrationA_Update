@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 namespace IntergrationA.Models
 {
-    [XmlRoot(ElementName = "string", Namespace = "http://tempuri.org/")]
+    //[XmlRoot(ElementName = "string", Namespace = "http://tempuri.org/")]
+
+    [XmlRoot(ElementName="string")]
     public class xmlmodel
     {
         [XmlAttribute(AttributeName = "xmlns")]
