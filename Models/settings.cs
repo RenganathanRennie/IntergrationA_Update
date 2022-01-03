@@ -15,7 +15,7 @@ namespace IntergrationA.Models
         public string settingsType { get; set; }
         [MaxLength(500)]
         public string settingsKey { get; set; }
-        [MaxLength(500)]
+       
         public string settingsValue { get; set; }
         [MaxLength(500)]
         public string settingsdescription { get; set; }

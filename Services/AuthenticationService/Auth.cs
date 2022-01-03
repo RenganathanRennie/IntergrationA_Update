@@ -65,7 +65,7 @@ namespace WebApi.Services
 
                  // get token expiry 
 
-                var expirytime =await Task.Run(()=> Convert.ToInt32(_dbcon.Settings.Where(x => x.settingsId == "set001").Select(v => v.settingsValue).FirstOrDefault()));
+                var expirytime =await Task.Run(()=> Convert.ToInt32(_dbcon.settings.Where(x => x.settingsId == "set001").Select(v => v.settingsValue).FirstOrDefault()));
                 _authlog.LogInformation(" expiry time " + expirytime.ToString());
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_appSettings.Secret);

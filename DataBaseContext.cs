@@ -11,7 +11,7 @@ namespace WebApi
         { }
 
         public DbSet<WebApi.Models.testmodel.SLBAdminUser> SLBAdminUser { get; set; }
-        public DbSet<settings> Settings { get; set; }
+        public DbSet<settings> settings { get; set; }
         public DbSet<userinfoschema> userinfoschema { get; set; }
     }
 }
