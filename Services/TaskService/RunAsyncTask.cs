@@ -38,6 +38,7 @@ namespace IntergrationA.Services.TaskService
                 _log.LogInformation("Loop ran at " + DateTime.Now.ToString());
                 await GetInventoryfile(_log);
                 await Getcustomerfile(_log);
+                await GetBarcodefile(_log);
                 await Task.Delay(2000);
             }
         }
@@ -79,7 +80,7 @@ namespace IntergrationA.Services.TaskService
         }
         private async Task Getcustomerfile(ILogger<RunAsyncTask> log)
         {
-             
+
             try
             {
                 // using (var scope = _scopeFactory.CreateScope())
@@ -120,6 +121,7 @@ namespace IntergrationA.Services.TaskService
             {
 
                 var deseraile = JsonConvert.DeserializeObject<barcodebaseclass>(await getjsondata("set003"));
+
             }
             catch (Exception ex)
             {
@@ -128,7 +130,50 @@ namespace IntergrationA.Services.TaskService
 
             }
 
-           
+
+        }
+        private async Task GetBarcodefile(ILogger<RunAsyncTask> log)
+        {
+            try
+            {
+
+                var deseraile = JsonConvert.DeserializeObject<barcodebaseclass>(await getjsondata("set003"));
+                if (deseraile.Success == true)
+                {
+                    if (deseraile.data.Count > 0)
+                    {
+
+                        using (var scope = _scopeFactory.CreateScope())
+                        {
+                            var xService = scope.ServiceProvider.GetService<DataBaseContext>();
+
+                            IMasterfile sim = new Masterfile(_log, xService);
+                            var res = await sim.insertBarcodeifnotExists(deseraile);
+                            if(res)
+                            {
+                                 _log.LogInformation("Barcode Saved Success");
+                            }
+
+
+                        }
+                    }
+                }
+
+                else
+                {
+                    _log.LogCritical(deseraile.Message);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                _log.LogError(ex.Message);
+                _log.LogTrace(ex.StackTrace);
+
+            }
+
+
         }
     }
 }

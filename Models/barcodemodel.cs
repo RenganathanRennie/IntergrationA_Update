@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,7 +8,7 @@ namespace IntergrationA.Models
 {
     public class barcodemodel
     {
-        public class barcode
+        public class barcodejson
     {
         public int seq { get; set; }
         public string ItemCode { get; set; }
@@ -25,11 +26,37 @@ namespace IntergrationA.Models
     public class barcodebaseclass
     {
         public bool Success { get; set; }
-        public object Message { get; set; }
-        public object Id { get; set; }
-        public object Code { get; set; }
-        public List<barcode> data { get; set; }
+        public string Message { get; set; }
+        public string Id { get; set; }
+        public string Code { get; set; }
+        public List<barcodejson> data { get; set; }
         public Page Page { get; set; }
     }
+    public class Barcode
+{
+    [Key]
+    public int seq { get; set; }
+
+    public string cNo { get; set; }
+
+    public string cMaker { get; set; }
+
+    public string U8CUSTDEF_0001_E001_F003 { get; set; }
+
+    public string U8CUSTDEF_0001_E001_F005 { get; set; }
+
+    public string U8CUSTDEF_0001_E001_F004 { get; set; }
+
+    public string U8CUSTDEF_0001_E001_PK { get; set; }
+
+    public string iswfcontrolled { get; set; }
+
+    public string iverifystate { get; set; }
+
+    public string ireturncount { get; set; }
+
+    public int? UAPRuntime_RowNO { get; set; }
+
+}
     }
 }
