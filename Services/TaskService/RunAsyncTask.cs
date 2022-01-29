@@ -16,6 +16,7 @@ using static IntergrationA.Models.inventorymodel;
 using Newtonsoft.Json;
 using IntergrationA.Services.Masterdetails;
 using static IntergrationA.Models.barcodemodel;
+using static IntergrationA.Models.categorymodel;
 
 namespace IntergrationA.Services.TaskService
 {
@@ -39,9 +40,55 @@ namespace IntergrationA.Services.TaskService
                 await GetInventoryfile(_log);
                 await Getcustomerfile(_log);
                 await GetBarcodefile(_log);
+                await GetCategoryfile(_log);
+
                 await Task.Delay(2000);
             }
         }
+
+        private async Task GetCategoryfile(ILogger<RunAsyncTask> log)
+        {
+            try
+            {
+
+                var deseraile = JsonConvert.DeserializeObject<categorybaseclass>(await getjsondata("set004"));
+                if (deseraile.Success == true)
+                {
+                    if (deseraile.data.Count > 0)
+                    {
+
+                        using (var scope = _scopeFactory.CreateScope())
+                        {
+                            var xService = scope.ServiceProvider.GetService<DataBaseContext>();
+
+                            IMasterfile sim = new Masterfile(_log, xService);
+                            var res = await sim.insertCategoriesifnotExists(deseraile);
+                            if (res)
+                            {
+                                _log.LogInformation("Category Saved Success");
+                            }
+
+
+                        }
+                    }
+                }
+
+                else
+                {
+                    _log.LogCritical(deseraile.Message);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                _log.LogError(ex.Message);
+                _log.LogTrace(ex.StackTrace);
+
+            }
+
+        }
+
         public async Task<string> getjsondata(string filter)
         {
             string result = string.Empty;
@@ -107,7 +154,7 @@ namespace IntergrationA.Services.TaskService
                 //     var deseraile = JsonConvert.DeserializeObject<Root>(valuefromxml);
                 // }
 
-                var deseraile = JsonConvert.DeserializeObject<Root>(await getjsondata("set002"));
+                //var deseraile = JsonConvert.DeserializeObject<Root>(await getjsondata("set002"));
             }
             catch (Exception ex)
             {
@@ -120,8 +167,32 @@ namespace IntergrationA.Services.TaskService
             try
             {
 
-                var deseraile = JsonConvert.DeserializeObject<barcodebaseclass>(await getjsondata("set003"));
+                var deseraile = JsonConvert.DeserializeObject<InventoryBaseclass>(await getjsondata("set002"));
+                if (deseraile.Success == true)
+                {
+                    if (deseraile.data.Count > 0)
+                    {
 
+                        using (var scope = _scopeFactory.CreateScope())
+                        {
+                            var xService = scope.ServiceProvider.GetService<DataBaseContext>();
+
+                            IMasterfile sim = new Masterfile(_log, xService);
+                            var res = await sim.insertInventoryifnotExists(deseraile);
+                            if (res)
+                            {
+                                _log.LogInformation("Inventory Saved Success");
+                            }
+
+
+                        }
+                    }
+                }
+
+                else
+                {
+                    _log.LogCritical(deseraile.Message);
+                }
             }
             catch (Exception ex)
             {
@@ -149,9 +220,9 @@ namespace IntergrationA.Services.TaskService
 
                             IMasterfile sim = new Masterfile(_log, xService);
                             var res = await sim.insertBarcodeifnotExists(deseraile);
-                            if(res)
+                            if (res)
                             {
-                                 _log.LogInformation("Barcode Saved Success");
+                                _log.LogInformation("Barcode Saved Success");
                             }
 
 

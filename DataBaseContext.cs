@@ -2,6 +2,8 @@
 using IntergrationA.Models;
 using Microsoft.EntityFrameworkCore;
 using static IntergrationA.Models.barcodemodel;
+using static IntergrationA.Models.categorymodel;
+using static IntergrationA.Models.inventorymodel;
 
 namespace WebApi
 {
@@ -15,5 +17,14 @@ namespace WebApi
         public DbSet<settings> settings { get; set; }
         public DbSet<userinfoschema> userinfoschema { get; set; }
         public DbSet<Barcode> Barcode { get; set; }
+        public DbSet<Inventory> Inventory { get; set; }
+
+        public DbSet<Categories> Categories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Barcode>()
+                .HasKey(c => new { c.seq, c.U8CUSTDEF_0001_E001_F003 });
+        }
     }
 }

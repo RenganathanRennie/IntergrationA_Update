@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static IntergrationA.Models.barcodemodel;
+using static IntergrationA.Models.categorymodel;
+using static IntergrationA.Models.inventorymodel;
 
 namespace IntergrationA.Services.Masterdetails
 {
@@ -10,6 +12,11 @@ namespace IntergrationA.Services.Masterdetails
     {
        Task<string> getsettings(string filtervalue);
        Task<bool> insertBarcodeifnotExists(barcodebaseclass Barcodedata);
+       Task<bool> insertCategoriesifnotExists(categorybaseclass categorybaseclass);
+
+       Task<bool> insertInventoryifnotExists(InventoryBaseclass InventoryBaseclass);
+
+
 
     }
 }

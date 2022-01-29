@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IntergrationA.Models;
 using IntergrationA.Services.TaskService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WebApi;
 using static IntergrationA.Models.barcodemodel;
+using static IntergrationA.Models.categorymodel;
 
 namespace IntergrationA.Services.Masterdetails
 {
@@ -96,6 +98,73 @@ namespace IntergrationA.Services.Masterdetails
                     await xService.SaveChangesAsync();
                     res = true;
 
+                }
+                #region update
+                var getrecordstobeupdate = xService.Barcode.ToList();
+                var updaterecords = await Task.Run(() => Barcodedata.data.Where(x =>
+                   !getrecordstobeupdate.Any(z => z.seq == x.seq && z.U8CUSTDEF_0001_E001_F005 == x.Barcode)).ToList());
+
+                if (updaterecords.Count > 0)
+                { 
+                    foreach (var item in updaterecords)
+                    {
+
+                        var getrecordstoupdate = xService.Barcode.Where(k => k.seq == item.seq).FirstOrDefault();
+                       // getrecordstoupdate.U8CUSTDEF_0001_E001_F003 = DateTime.Now.ToString("yyyy-MM-dd hh:MM:ss");
+                        getrecordstoupdate.U8CUSTDEF_0001_E001_F004 = item.ItemCode;
+                        getrecordstoupdate.U8CUSTDEF_0001_E001_F005 = item.Barcode;
+                        xService.Barcode.Update(getrecordstoupdate);
+                        await xService.SaveChangesAsync(); 
+                    }
+
+                    res = true;
+                }
+                #endregion
+
+            }
+            catch (Exception ex)
+            {
+                res = false;
+            }
+            return res;
+        }
+        public async Task<bool> insertCategoriesifnotExists(categorybaseclass categorybaseclass)
+        {
+            bool res = false;
+            try
+            {
+                var getrecords = xService.Categories.ToList();
+                var missingRecords = await Task.Run(() => categorybaseclass.data.Where(x =>
+                  !getrecords.Any(z => z.seq == x.seq)).ToList());
+                if (missingRecords.Count > 0)
+                {
+                    await xService.Categories.AddRangeAsync(missingRecords);
+                    await xService.SaveChangesAsync();
+                    res = true;
+                }
+
+            }
+            catch (Exception)
+
+            {
+                res = false;
+            }
+            return res;
+        }
+
+        public async Task<bool> insertInventoryifnotExists(inventorymodel.InventoryBaseclass InventoryBaseclass)
+        {
+              bool res = false;
+            try
+            {
+                var getrecords = xService.Inventory.ToList();
+                var missingRecords = await Task.Run(() => InventoryBaseclass.data.Where(x =>
+                  !getrecords.Any(z => z.seq == x.seq)).ToList());
+                if (missingRecords.Count > 0)
+                {
+                    await xService.Inventory.AddRangeAsync(missingRecords);
+                    await xService.SaveChangesAsync();
+                    res = true;
                 }
 
             }
