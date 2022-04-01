@@ -15,6 +15,7 @@ using static IntergrationA.Models.barcodemodel;
 using static IntergrationA.Models.categorymodel;
 using static IntergrationA.Models.inventorymodel;
 using static IntergrationA_Update.Models.domodel;
+using static IntergrationA_Update.Models.somodel;
 
 namespace IntergrationA_Update.Services.Masterdetails
 {
@@ -157,15 +158,15 @@ namespace IntergrationA_Update.Services.Masterdetails
                 // {
                 //     return null;
                 // }
-                List<domodelsummary> lstdomodelsum = new List<domodelsummary>();
-                var Orderhader = await Task.Run(() => (xService.OrderHeader.Where(x => x.DoDate >= filter.Date && x.DoDate.Date <= filter2).ToList()));
+                List<somodelsummary> lstdomodelsum = new List<somodelsummary>();
+                var Orderhader = await Task.Run(() => (xService.SalesOrderHeader.Where(x => x.SalesOrderDate >= filter.Date && x.SalesOrderDate.Date <= filter2).ToList()));
                 if (Orderhader.Count() > 0)
                 {
                     foreach (var item in Orderhader)
                     {
-                        var Orderde = await Task.Run(() => (xService.OrderDetails.Where(x => x.OrderNo == item.OrderNo).ToList()));
+                        var Orderde = await Task.Run(() => (xService.SalesOrderDetails.Where(x => x.SalesOrderNo == item.SalesOrderNo).ToList()));
 
-                        domodelsummary sum = new domodelsummary()
+                        somodelsummary sum = new somodelsummary()
                         {
                             dodetails = Orderde,
                             doheader = item
@@ -207,15 +208,17 @@ namespace IntergrationA_Update.Services.Masterdetails
                 //                                        { Orderheader = doh, Orderdetails = dod })
 
                 // );
-                var Orderhader = await Task.Run(() => (xService.OrderHeader.Where(x => x.OrderNo == filter).FirstOrDefault()));
-                var Orderde = await Task.Run(() => (xService.OrderDetails.Where(x => x.OrderNo == Orderhader.OrderNo).ToList()));
+                var Orderhader = await Task.Run(() => (xService.SalesOrderHeader.Where(x => x.SalesOrderNo == filter).FirstOrDefault()));
+                var Orderde = await Task.Run(() => (xService.SalesOrderDetails.Where(x => x.SalesOrderNo== Orderhader.SalesOrderNo).ToList()));
                 if (Orderhader != null && Orderde != null)
                 {
-                    domodelsummary sum = new domodelsummary()
+                    somodelsummary sum = new somodelsummary()
                     {
                         dodetails = Orderde,
                         doheader = Orderhader
                     };
+
+                    
                     var hjsondata = JsonConvert.SerializeObject(sum);
                     //var jsonresult = JsonConvert.DeserializeObject<domodelsummary>(hjsondata);
                     return hjsondata;

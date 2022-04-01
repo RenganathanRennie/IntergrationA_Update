@@ -5,25 +5,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IntergrationA_Update.Models
 {
-    public class domodel
+    public class somodel
     {
-
-public class domodelsummary
+        
+public class somodelsummary
 {
-    public DeliveryOrderHeader doheader {get;set;}
-    public IEnumerable<DeliveryOrderDetails> dodetails {get;set;}
+    public SalesOrderHeader doheader {get;set;}
+    public List<SalesOrderDetails> dodetails {get;set;}
     
 
 }
-public class DeliveryOrderDetails
+public class SalesOrderDetails
 {
     
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
     public long Id { get; set; }
     [MaxLength(100)]
-    [Required(ErrorMessage = "Order No is required")]
-    public string OrderNo { get; set; }
+    [Required(ErrorMessage = "SalesOrder No is required")]
+    public string SalesOrderNo { get; set; }
     [MaxLength(100)]
     [Required(ErrorMessage = "Product Id is required")]
     public string ProductId { get; set; }
@@ -54,13 +54,13 @@ public class DeliveryOrderDetails
     public bool IsDeleted { get; set; }
 }
 
-        // public class OrderDetails
+        // public class SalesOrderDetails
         // {
 
         //     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         //     public long Id { get; set; }
         //     [MaxLength(100)]
-        //     public string OrderNo { get; set; }
+        //     public string SalesOrderNo { get; set; }
             
         //     [MaxLength(100)]
         //     public string ProductId { get; set; }
@@ -88,18 +88,18 @@ public class DeliveryOrderDetails
         // }
 
 
-        // // public class OrderHeader
+        // // public class SalesOrderHeader
         // {
 
         //     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         //     public long Id { get; set; }
         //     [MaxLength(500)]
-        //     public string OrderType { get; set; }
+        //     public string SalesOrderType { get; set; }
         //     [MaxLength(500)]
 
         //     [Key]
-        //     public string OrderNo { get; set; }
-        //     public DateTime OrderDate { get; set; }
+        //     public string SalesOrderNo { get; set; }
+        //     public DateTime SalesOrderDate { get; set; }
         //     [MaxLength(500)]
         //     public string InvoiceNo { get; set; }
         //     public DateTime InvoiceDate { get; set; }
@@ -166,19 +166,19 @@ public class DeliveryOrderDetails
         //     public int IsDeleted { get; set; }
         // }
         
-public class DeliveryOrderHeader
+public class SalesOrderHeader
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
    
     public long Id { get; set; }
     [MaxLength(500)]
-    public string OrderType { get; set; }
+    public string SalesOrderType { get; set; }
     [MaxLength(500)]
-    [Required(ErrorMessage = "Order No is required")]
-    public string OrderNo { get; set; }
-    [Required(ErrorMessage = "Order Date is required")]
-    public DateTime? OrderDate { get; set; }
+    [Required(ErrorMessage = "SalesOrder No is required")]
+    public string SalesOrderNo { get; set; }
+    [Required(ErrorMessage = "SalesOrder Date is required")]
+    public DateTime SalesOrderDate { get; set; }
     [MaxLength(500)]
     public string InvoiceNo { get; set; }
     public DateTime? InvoiceDate { get; set; }

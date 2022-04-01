@@ -5,6 +5,7 @@ using static IntergrationA.Models.barcodemodel;
 using static IntergrationA.Models.categorymodel;
 using static IntergrationA.Models.inventorymodel;
 using static IntergrationA_Update.Models.domodel;
+using static IntergrationA_Update.Models.somodel;
 
 namespace WebApi
 {
@@ -21,9 +22,14 @@ namespace WebApi
         public DbSet<Inventory> Inventory { get; set; }
 
         public DbSet<Categories> Categories { get; set; }
-        public DbSet<OrderDetails> OrderDetails { get; set; }
+        public DbSet<DeliveryOrderDetails> OrderDetails { get; set; }
 
-        public DbSet<OrderHeader> OrderHeader { get; set; }
+        public DbSet<DeliveryOrderHeader> OrderHeader { get; set; }
+
+        public DbSet<SalesOrderDetails> SalesOrderDetails { get; set; }
+
+        public DbSet<SalesOrderHeader> SalesOrderHeader { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,7 +37,7 @@ namespace WebApi
             modelBuilder.Entity<Barcode>()
                 .HasKey(c => new { c.seq, c.U8CUSTDEF_0001_E001_F003 });
 
-                 modelBuilder.Entity<OrderDetails>()
+                 modelBuilder.Entity<DeliveryOrderDetails>()
                 .HasKey(c => new { c.OrderNo, c.ProductId });
         }
     }
