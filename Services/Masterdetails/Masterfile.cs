@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IntergrationA.Models;
+using IntergrationA.Services.Masterdetails;
 using IntergrationA.Services.TaskService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WebApi;
 using static IntergrationA.Models.barcodemodel;
 using static IntergrationA.Models.categorymodel;
+using static IntergrationA.Models.inventorymodel;
+
 
 namespace IntergrationA.Services.Masterdetails
 {
@@ -25,6 +28,39 @@ namespace IntergrationA.Services.Masterdetails
             this.xService = xService;
 
         }
+
+        public inventorymodel.InventoryBaseclassreturn GetInventoryBaseclass()
+        {
+            try
+            {
+                var invdetails = xService.Inventory.ToList();
+
+                List<Inventory> lst = new List<Inventory>();
+
+                if (invdetails.Count > 0)
+                {
+                    InventoryBaseclassreturn invbase = new InventoryBaseclassreturn()
+                    {
+                        Success = true,
+                        Message = "200",
+                        data = invdetails
+                    };
+
+                    return invbase;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message + ex.StackTrace);
+                return null;
+            }
+        }
+
         public async Task<string> getsettings(string filtervalue)
         {
             string res = string.Empty;
@@ -105,16 +141,16 @@ namespace IntergrationA.Services.Masterdetails
                    !getrecordstobeupdate.Any(z => z.seq == x.seq && z.U8CUSTDEF_0001_E001_F005 == x.Barcode)).ToList());
 
                 if (updaterecords.Count > 0)
-                { 
+                {
                     foreach (var item in updaterecords)
                     {
 
                         var getrecordstoupdate = xService.Barcode.Where(k => k.seq == item.seq).FirstOrDefault();
-                       // getrecordstoupdate.U8CUSTDEF_0001_E001_F003 = DateTime.Now.ToString("yyyy-MM-dd hh:MM:ss");
+                        // getrecordstoupdate.U8CUSTDEF_0001_E001_F003 = DateTime.Now.ToString("yyyy-MM-dd hh:MM:ss");
                         getrecordstoupdate.U8CUSTDEF_0001_E001_F004 = item.ItemCode;
                         getrecordstoupdate.U8CUSTDEF_0001_E001_F005 = item.Barcode;
                         xService.Barcode.Update(getrecordstoupdate);
-                        await xService.SaveChangesAsync(); 
+                        await xService.SaveChangesAsync();
                     }
 
                     res = true;
@@ -154,7 +190,7 @@ namespace IntergrationA.Services.Masterdetails
 
         public async Task<bool> insertInventoryifnotExists(inventorymodel.InventoryBaseclass InventoryBaseclass)
         {
-              bool res = false;
+            bool res = false;
             try
             {
                 var getrecords = xService.Inventory.ToList();
@@ -162,11 +198,110 @@ namespace IntergrationA.Services.Masterdetails
                   !getrecords.Any(z => z.seq == x.seq)).ToList());
                 if (missingRecords.Count > 0)
                 {
-                    await xService.Inventory.AddRangeAsync(missingRecords);
+                    List<Inventory> lst = new List<Inventory>();
+                    #region forloop
+
+
+                    foreach (var item in missingRecords)
+                    {
+
+                        Inventory inv = new Inventory();
+
+                        inv.seq = item.seq;
+
+                        inv.itemno = item.itemno;
+
+                        inv.stockcode = item.stockcode;
+
+                        inv.longdescription = item.longdescription;
+
+                        inv.ClassificationCodeL1 = item.ClassificationCode;
+
+                        inv.ClassificationCodeL2 = item.ClassificationCode;
+
+                        inv.ClassificationCodeL3 = item.ClassificationCode;
+
+                        inv.originmanufacture = item.originmanufacture;
+
+                        inv.referenceprice = item.referenceprice;
+
+                        inv.Length = item.Length.ToString();
+
+                        inv.Width = item.Width.ToString();
+
+                        inv.Height = item.Height.ToString();
+
+                        inv.Weight = item.Weight.ToString();
+
+
+                        inv.Specifications = item.Specifications;
+
+                        inv.PalletQTY = item.PalletQTY;
+
+                        inv.PrimaryMeasurement = item.PrimaryMeasurement;
+
+                        inv.DefaultLocation = item.DefaultLocation;
+
+                        inv.WarehouseCode = item.WarehouseCode;
+
+                        inv.Volume = item.Volume;
+
+                        inv.ImageURL = item.ImageURL;
+
+                        inv.EshopDesc = item.Eshop;
+
+                        inv.EshopUnitPrice = item.EshopUnitPrice;
+
+                        inv.EshopBundleQty = item.EshopBundleQty;
+
+                        inv.EshopBundlePrice = item.EshopBundlePrice;
+
+                        inv.MarketplaceDesc = item.Marketplace;
+
+                        inv.MarketplacePrice = item.MarketplacePrice;
+
+                        inv.MarketplaceBundleQty = item.MarketplaceBundleQty;
+
+                        inv.POSDesc = item.POSDesc;
+
+                        inv.POSBundleQTY = item.POSBundleQTY;
+
+                        inv.POSBundleQty1 = item.POSBundleQty1;
+
+                        inv.POSBundlePrice = item.POSBundlePrice;
+
+                        inv.PackageWeight = item.PackageWeight;
+
+                        inv.PackageLength = item.PackageLength;
+
+                        inv.PackageWidth = item.PackageWidth;
+
+                        inv.PackageHeight = item.PackageHeight;
+
+                        inv.Eshop = item.Eshop;
+
+                        inv.Internal = item.Internal;
+
+                        inv.POS = item.POS;
+
+                        inv.Marketplace = item.Marketplace;
+
+                        inv.CreatedBy = "";
+
+                        inv.CreatedDate = DateTime.Now;
+
+                        inv.UpdatedBy = "";
+
+                        inv.UpdatedDate = DateTime.Now;
+
+                        inv.IsDeleted = false;
+                        lst.Add(inv);
+                    }
+                    #endregion
+                    await xService.Inventory.AddRangeAsync(lst);
                     await xService.SaveChangesAsync();
                     res = true;
                 }
-
             }
             catch (Exception)
 
