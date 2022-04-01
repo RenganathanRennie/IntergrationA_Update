@@ -10,13 +10,14 @@ namespace IntergrationA.Services.Masterdetails
 {
     public interface IMasterfile
     {
-       Task<string> getsettings(string filtervalue);
-       Task<bool> insertBarcodeifnotExists(barcodebaseclass Barcodedata);
-       Task<bool> insertCategoriesifnotExists(categorybaseclass categorybaseclass);
+        Task<string> getsettings(string filtervalue);
+        Task<bool> insertBarcodeifnotExists(barcodebaseclass Barcodedata);
+        Task<bool> insertCategoriesifnotExists(categorybaseclass categorybaseclass);
 
-       Task<bool> insertInventoryifnotExists(InventoryBaseclass InventoryBaseclass);
+        Task<bool> insertInventoryifnotExists(InventoryBaseclass InventoryBaseclass);
 
 
+        InventoryBaseclassreturn GetInventoryBaseclass();
 
-    }
+        }
 }
