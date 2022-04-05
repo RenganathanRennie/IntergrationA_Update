@@ -1,0 +1,5 @@
+2022-04-05T14:51:26.2473976+05:30  [ERR] IDX12729: Unable to decode the header 'System.String' as Base64Url encoded string. jwtEncodedString: 'System.String'. (9cc5e41f)
+2022-04-05T14:52:08.2307317+05:30  [ERR] IDX12729: Unable to decode the header 'System.String' as Base64Url encoded string. jwtEncodedString: 'System.String'. (9cc5e41f)
+2022-04-05T14:52:09.2295938+05:30  [INF] Authenticate is called  (ba87ca6e)
+2022-04-05T14:52:17.9766703+05:30  [INF]  expiry time 5 (05a92a1d)
+2022-04-05T14:52:19.8410374+05:30  [INF] {"Id":"test","Token":["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InRlc3QiLCJuYmYiOjE2NDkxNTA1MzgsImV4cCI6MTY0OTE2ODUzOCwiaWF0IjoxNjQ5MTUwNTM4fQ.XCq6NBV2hWXj6_dWd6jkkGWrlXvOviGPOis__iVKfe8","05/04/2022 14:52:18","05/04/2022 19:52:18"]} (61b26788)

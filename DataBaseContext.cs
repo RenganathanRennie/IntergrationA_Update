@@ -22,9 +22,9 @@ namespace WebApi
         public DbSet<Inventory> Inventory { get; set; }
 
         public DbSet<Categories> Categories { get; set; }
-        public DbSet<DeliveryOrderDetails> OrderDetails { get; set; }
+        public DbSet<DeliveryOrderDetails> DeliveryOrderDetails { get; set; }
 
-        public DbSet<DeliveryOrderHeader> OrderHeader { get; set; }
+        public DbSet<DeliveryOrderHeader> DeliveryOrderHeader { get; set; }
 
         public DbSet<SalesOrderDetails> SalesOrderDetails { get; set; }
 

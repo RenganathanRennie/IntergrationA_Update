@@ -10,8 +10,8 @@ namespace IntergrationA_Update.Models
         
 public class somodelsummary
 {
-    public SalesOrderHeader doheader {get;set;}
-    public List<SalesOrderDetails> dodetails {get;set;}
+    public SalesOrderHeader soheader {get;set;}
+    public List<SalesOrderDetails> sodetails {get;set;}
     
 
 }

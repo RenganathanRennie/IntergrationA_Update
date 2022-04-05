@@ -168,8 +168,8 @@ namespace IntergrationA_Update.Services.Masterdetails
 
                         somodelsummary sum = new somodelsummary()
                         {
-                            dodetails = Orderde,
-                            doheader = item
+                            sodetails = Orderde,
+                            soheader = item
                         };
 
                         lstdomodelsum.Add(sum);
@@ -214,8 +214,8 @@ namespace IntergrationA_Update.Services.Masterdetails
                 {
                     somodelsummary sum = new somodelsummary()
                     {
-                        dodetails = Orderde,
-                        doheader = Orderhader
+                        sodetails = Orderde,
+                        soheader = Orderhader
                     };
 
                     
@@ -243,8 +243,8 @@ namespace IntergrationA_Update.Services.Masterdetails
             try
             {
 
-                await xService.OrderDetails.AddRangeAsync(domodelsummary.dodetails);
-                await xService.OrderHeader.AddAsync(domodelsummary.doheader);
+                await xService.DeliveryOrderDetails.AddRangeAsync(domodelsummary.dodetails);
+                await xService.DeliveryOrderHeader.AddAsync(domodelsummary.doheader);
                 await xService.SaveChangesAsync();
                 res = true;
                 return res;
