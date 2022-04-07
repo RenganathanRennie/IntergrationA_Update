@@ -136,28 +136,12 @@ namespace IntergrationA_Update.Services.Masterdetails
             }
         }
 
-        public async Task<string> getdo(DateTime filter, DateTime filter2)
+        //Order
+        public async Task<string> getOrder(DateTime filter, DateTime filter2)
         {
             try
             {
-                // var invdetails = await Task.Run(() => (from dod in xService.OrderDetails
-                //                                        join doh in xService.OrderHeader
-                //                                        on dod.OrderNo equals doh.OrderNo
-                //                                        where dod.OrderNo == doh.OrderNo && (doh.DoDate.Date >= filter.Date
-                //                                         && doh.DoDate.Date <= filter2)
-                //                                        select new
-                //                                        { Orderheader = doh, Orderdetails = dod }).ToList()
-
-                // );
-                // if (invdetails.Count > 0)
-                // {
-                //     var jsondata = JsonConvert.SerializeObject(invdetails);
-                //     return jsondata;
-                // }
-                // else
-                // {
-                //     return null;
-                // }
+                
                 List<somodelsummary> lstdomodelsum = new List<somodelsummary>();
                 var Orderhader = await Task.Run(() => (xService.SalesOrderHeader.Where(x => x.SalesOrderDate >= filter.Date && x.SalesOrderDate.Date <= filter2).ToList()));
                 if (Orderhader.Count() > 0)
@@ -196,26 +180,97 @@ namespace IntergrationA_Update.Services.Masterdetails
             }
 
         }
-        public async Task<string> getdo(string filter)
+        public async Task<string> getOrder(string filter)
         {
             try
             {
-                // var invdetails = await Task.Run(() => (from doh in xService.OrderHeader
-                //                                        join dod in xService.OrderDetails
-                //                                        on doh.OrderNo equals dod.OrderNo
-
-                //                                        select new
-                //                                        { Orderheader = doh, Orderdetails = dod })
-
-                // );
+               
                 var Orderhader = await Task.Run(() => (xService.SalesOrderHeader.Where(x => x.SalesOrderNo == filter).FirstOrDefault()));
-                var Orderde = await Task.Run(() => (xService.SalesOrderDetails.Where(x => x.SalesOrderNo== Orderhader.SalesOrderNo).ToList()));
+                var Orderde = await Task.Run(() => (xService.SalesOrderDetails.Where(x => x.SalesOrderNo == Orderhader.SalesOrderNo).ToList()));
                 if (Orderhader != null && Orderde != null)
                 {
                     somodelsummary sum = new somodelsummary()
                     {
                         sodetails = Orderde,
                         soheader = Orderhader
+                    };
+
+
+                    var hjsondata = JsonConvert.SerializeObject(sum);
+                    //var jsonresult = JsonConvert.DeserializeObject<domodelsummary>(hjsondata);
+                    return hjsondata;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //log.LogError(ex.Message + ex.StackTrace);
+                return null;
+            }
+
+        }
+
+
+        //DO
+        public async Task<string> getdo(DateTime filter, DateTime filter2)
+        {
+            try
+            {                
+                List<domodelsummary> lstdomodelsum = new List<domodelsummary>();
+                var DOhader = await Task.Run(() => (xService.DeliveryOrderHeader.Where(x => x.DoDate >= filter.Date && x.DoDate.Date <= filter2).ToList()));
+                if (DOhader.Count() > 0)
+                {
+                    foreach (var item in DOhader)
+                    {
+                        var DoDetail = await Task.Run(() => (xService.DeliveryOrderDetails.Where(x => x.OrderNo == item.OrderNo).ToList()));
+
+                        domodelsummary sum = new domodelsummary()
+                        {
+                            dodetails = DoDetail,
+                            doheader = item
+                        };
+
+                        lstdomodelsum.Add(sum);
+                    }
+
+                }
+                if (lstdomodelsum.Count > 0)
+                {
+                    var jsondata = JsonConvert.SerializeObject(lstdomodelsum);
+                    return jsondata;
+                }
+                else
+                {
+                    return null;
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                //log.LogError(ex.Message + ex.StackTrace);
+                return null;
+            }
+
+        }
+        public async Task<string> getdo(string filter)
+        {
+            try
+            {
+               
+                var DOHeader = await Task.Run(() => (xService.DeliveryOrderHeader.Where(x => x.DoNo == filter).FirstOrDefault()));
+                var DODetail = await Task.Run(() => (xService.DeliveryOrderDetails.Where(x => x.OrderNo== DOHeader.DoNo).ToList()));
+                if (DOHeader != null && DODetail != null)
+                {
+                    domodelsummary sum = new domodelsummary()
+                    {
+                        dodetails = DODetail,
+                        doheader = DOHeader
                     };
 
                     

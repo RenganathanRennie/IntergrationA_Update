@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -6,75 +6,26 @@ using IntergrationA_Update.Services.Masterdetails;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebApi;
-using static IntergrationA.Models.inventorymodel;
 using static IntergrationA_Update.Models.domodel;
 
-namespace IntergrationA_Update.Controllers
+namespace WebApi.Controllers
 {
-    public class InterfaceData : ControllerBase
+    public class DeliveryOrder : Controller
     {
         DataBaseContext context;
         private IGetmasterdata objgetmasterdata;
-        public InterfaceData(DataBaseContext context, IGetmasterdata objgetmasterdata)
+        public DeliveryOrder(DataBaseContext context, IGetmasterdata objgetmasterdata)
         {
             this.objgetmasterdata = objgetmasterdata;
             this.context = context;
         }
 
-        [HttpGet]
-        [Authorize]
-        [Route("GetInventory")]
-        public async Task<IActionResult> get()
-        {
-            var result = await objgetmasterdata.GetInventoryBaseclass();
-            if (result != null)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return NoContent();
-            }
-        }
+
+        //DO
 
         [HttpGet]
         [Authorize]
-        [Route("GetBarcode")]
-        public async Task<IActionResult> GetBarcode()
-        {
-            var result = await objgetmasterdata.GetBarcodeBaseclass();
-            if (result != null)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return NoContent();
-            }
-
-        }
-        [HttpGet]
-        [Authorize]
-        [Route("GetCategory")]
-        public async Task<IActionResult> GetCategory()
-        {
-            var result = await objgetmasterdata.GetCategoryBaseclass();
-
-            if (result != null)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return NoContent();
-            }
-
-        }
-
-        [HttpGet]
-        [Authorize]
-        [Route("GetDobyDate")]
-
+        [Route("GetDObyDate")]
         /// <param name="deliveryorder_fromDate">Delivery order From Date</param>
         public async Task<IActionResult> GetDobyData(string deliveryorder_fromDate, string deliveryorder_toDate)
         {
@@ -102,7 +53,7 @@ namespace IntergrationA_Update.Controllers
 
         [HttpGet]
         [Authorize]
-        [Route("GetDobyOrderNo")]
+        [Route("GetDObyOrderNo")]
         public async Task<IActionResult> GetDobyOrderNo(string OrderNo)
         {
             //DateTime time =DateTime.ParseExact(dateTime,"dd-MM-yyyy", new CultureInfo("en-US"));
@@ -116,9 +67,11 @@ namespace IntergrationA_Update.Controllers
                 return NoContent();
             }
         }
+
+
         [HttpPost]
         [Authorize]
-        [Route("PostDo")]
+        [Route("PostDO")]
         public async Task<IActionResult> PostDo([FromBody] JsonElement domodelsummary)
         {
             try
@@ -132,8 +85,8 @@ namespace IntergrationA_Update.Controllers
                     if (this.ModelState.IsValid)
                     {
                         //DateTime time =DateTime.ParseExact(dateTime,"dd-MM-yyyy", new CultureInfo("en-US"));
-                        var result =await objgetmasterdata.postdo(dm);
-                       // var result = false;
+                        var result = await objgetmasterdata.postdo(dm);
+                        // var result = false;
                         if (result)
                         {
                             return Ok(" DO Success");
@@ -162,8 +115,7 @@ namespace IntergrationA_Update.Controllers
 
 
 
-
-
         }
+
     }
 }

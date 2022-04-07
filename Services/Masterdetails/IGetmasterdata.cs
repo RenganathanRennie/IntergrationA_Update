@@ -14,8 +14,11 @@ namespace IntergrationA_Update.Services.Masterdetails
           Task<InventoryBaseclassreturn> GetInventoryBaseclass();
           Task<barcodebaseclass> GetBarcodeBaseclass();
           Task<categorybaseclass> GetCategoryBaseclass();
-          Task<string> getdo(DateTime filter,DateTime filter2);
-          Task<string> getdo(string filter);       
+
+        Task<string> getOrder(DateTime filter, DateTime filter2);
+        Task<string> getOrder(string filter);
+        Task<string> getdo(DateTime filter,DateTime filter2);
+        Task<string> getdo(string filter);       
 
           Task<bool> postdo(domodelsummary domodelsummary)  ; 
     }

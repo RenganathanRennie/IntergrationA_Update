@@ -142,7 +142,6 @@ D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\bin\Debug\netcoreapp3.1
 D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
 D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\obj\Debug\netcoreapp3.1\WebApi.csprojAssemblyReference.cache
 D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\obj\Debug\netcoreapp3.1\WebApi.AssemblyInfoInputs.cache
 D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\obj\Debug\netcoreapp3.1\WebApi.AssemblyInfo.cs
 D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\obj\Debug\netcoreapp3.1\WebApi.csproj.CoreCompileInputs.cache
@@ -156,3 +155,4 @@ D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\obj\Debug\netcoreapp3.1
 D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\obj\Debug\netcoreapp3.1\WebApi.dll
 D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\obj\Debug\netcoreapp3.1\WebApi.pdb
 D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\obj\Debug\netcoreapp3.1\WebApi.genruntimeconfig.cache
+D:\Suresh\Testing\Middle\Middelware\IntergrationA_Update\obj\Debug\netcoreapp3.1\WebApi.csprojAssemblyReference.cache
