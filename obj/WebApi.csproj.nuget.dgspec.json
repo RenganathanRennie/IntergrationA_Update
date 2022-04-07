@@ -1,38 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Suresh\\Testing\\Middle\\Middelware\\IntergrationA_Update\\WebApi.csproj": {}
+    "C:\\Users\\Renga\\Documents\\IntergrationA_Update\\IntergrationA_Update\\WebApi.csproj": {}
   },
   "projects": {
-    "D:\\Suresh\\Testing\\Middle\\Middelware\\IntergrationA_Update\\WebApi.csproj": {
+    "C:\\Users\\Renga\\Documents\\IntergrationA_Update\\IntergrationA_Update\\WebApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Suresh\\Testing\\Middle\\Middelware\\IntergrationA_Update\\WebApi.csproj",
+        "projectUniqueName": "C:\\Users\\Renga\\Documents\\IntergrationA_Update\\IntergrationA_Update\\WebApi.csproj",
         "projectName": "WebApi",
-        "projectPath": "D:\\Suresh\\Testing\\Middle\\Middelware\\IntergrationA_Update\\WebApi.csproj",
-        "packagesPath": "C:\\Users\\vasu\\.nuget\\packages\\",
-        "outputPath": "D:\\Suresh\\Testing\\Middle\\Middelware\\IntergrationA_Update\\obj\\",
+        "projectPath": "C:\\Users\\Renga\\Documents\\IntergrationA_Update\\IntergrationA_Update\\WebApi.csproj",
+        "packagesPath": "C:\\Users\\Renga\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Renga\\Documents\\IntergrationA_Update\\IntergrationA_Update\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\vasu\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\Renga\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -44,7 +38,6 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
@@ -105,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.212\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

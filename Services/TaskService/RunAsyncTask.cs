@@ -34,16 +34,16 @@ namespace IntergrationA.Services.TaskService
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // while (!stoppingToken.IsCancellationRequested)
-            // {
-            //     _log.LogInformation("Loop ran at " + DateTime.Now.ToString());
-            //     await GetInventoryfile(_log);
-            //     await Getcustomerfile(_log);
-            //     await GetBarcodefile(_log);
-            //     await GetCategoryfile(_log);
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                _log.LogInformation("Loop ran at " + DateTime.Now.ToString());
+                await GetInventoryfile(_log);
+                await Getcustomerfile(_log);
+                await GetBarcodefile(_log);
+                await GetCategoryfile(_log);
 
-            //     await Task.Delay(20000000);
-            // }
+                await Task.Delay(20000000);
+            }
         }
 
         private async Task GetCategoryfile(ILogger<RunAsyncTask> log)

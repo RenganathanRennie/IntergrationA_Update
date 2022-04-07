@@ -10,6 +10,7 @@ using static IntergrationA_Update.Models.domodel;
 
 namespace WebApi.Controllers
 {
+    [ApiController]
     public class DeliveryOrder : Controller
     {
         DataBaseContext context;
@@ -72,20 +73,20 @@ namespace WebApi.Controllers
         [HttpPost]
         [Authorize]
         [Route("PostDO")]
-        public async Task<IActionResult> PostDo([FromBody] JsonElement domodelsummary)
+        public async Task<IActionResult> PostDo([FromBody] domodelsummary domodelsummary)
         {
             try
             {
-                var getstringfrombody = domodelsummary.GetRawText();
+               // var getstringfrombody = domodelsummary.GetRawText();
 
-                var dm = JsonConvert.DeserializeObject<domodelsummary>(getstringfrombody);
-                if (dm != null)
+               // var dm = JsonConvert.DeserializeObject<domodelsummary>(getstringfrombody);
+                if (domodelsummary != null)
                 {
 
                     if (this.ModelState.IsValid)
                     {
                         //DateTime time =DateTime.ParseExact(dateTime,"dd-MM-yyyy", new CultureInfo("en-US"));
-                        var result = await objgetmasterdata.postdo(dm);
+                        var result = await objgetmasterdata.postdo(domodelsummary);
                         // var result = false;
                         if (result)
                         {
