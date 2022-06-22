@@ -37,10 +37,10 @@ namespace IntergrationA.Services.TaskService
             while (!stoppingToken.IsCancellationRequested)
             {
                 _log.LogInformation("Loop ran at " + DateTime.Now.ToString());
-                await GetInventoryfile(_log);
-                await Getcustomerfile(_log);
-                await GetBarcodefile(_log);
-                await GetCategoryfile(_log);
+                // await GetInventoryfile(_log);
+                // await Getcustomerfile(_log);
+                // await GetBarcodefile(_log);
+                // await GetCategoryfile(_log);
 
                 await Task.Delay(20000000);
             }

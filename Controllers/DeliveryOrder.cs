@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -73,12 +74,12 @@ namespace WebApi.Controllers
         [HttpPost]
         [Authorize]
         [Route("PostDO")]
-        public async Task<IActionResult> PostDo([FromBody] domodelsummary domodelsummary)
+        public async Task<IActionResult> PostDo([FromBody] List<domodelsummary> deliveryOrder)
         {
             try
             {
                // var getstringfrombody = domodelsummary.GetRawText();
-
+domodelsummary domodelsummary=null;
                // var dm = JsonConvert.DeserializeObject<domodelsummary>(getstringfrombody);
                 if (domodelsummary != null)
                 {
