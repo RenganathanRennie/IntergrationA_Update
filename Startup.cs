@@ -29,7 +29,8 @@ namespace WebApi
         {
             services.AddMvcCore();            
             services.AddCors();
-            services.AddControllers();
+            services.AddControllers();    
+            services.AddControllers().AddNewtonsoftJson();      
             services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo

@@ -37,8 +37,8 @@ namespace WebApi
             modelBuilder.Entity<Barcode>()
                 .HasKey(c => new { c.seq, c.U8CUSTDEF_0001_E001_F003 });
 
-                 modelBuilder.Entity<DeliveryOrderDetails>()
-                .HasKey(c => new { c.OrderNo, c.ProductId });
+                //  modelBuilder.Entity<DeliveryOrderDetails>()
+                // .HasKey(c => new { c.DoNo, c.ProductId });
         }
     }
 }

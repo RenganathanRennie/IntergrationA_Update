@@ -141,7 +141,7 @@ namespace IntergrationA_Update.Services.Masterdetails
         {
             try
             {
-                
+
                 List<somodelsummary> lstdomodelsum = new List<somodelsummary>();
                 var Orderhader = await Task.Run(() => (xService.SalesOrderHeader.Where(x => x.SalesOrderDate >= filter.Date && x.SalesOrderDate.Date <= filter2).ToList()));
                 if (Orderhader.Count() > 0)
@@ -184,7 +184,7 @@ namespace IntergrationA_Update.Services.Masterdetails
         {
             try
             {
-               
+
                 var Orderhader = await Task.Run(() => (xService.SalesOrderHeader.Where(x => x.SalesOrderNo == filter).FirstOrDefault()));
                 var Orderde = await Task.Run(() => (xService.SalesOrderDetails.Where(x => x.SalesOrderNo == Orderhader.SalesOrderNo).ToList()));
                 if (Orderhader != null && Orderde != null)
@@ -219,14 +219,14 @@ namespace IntergrationA_Update.Services.Masterdetails
         public async Task<string> getdo(DateTime filter, DateTime filter2)
         {
             try
-            {                
+            {
                 List<domodelsummary> lstdomodelsum = new List<domodelsummary>();
                 var DOhader = await Task.Run(() => (xService.DeliveryOrderHeader.Where(x => x.DoDate >= filter.Date && x.DoDate.Date <= filter2).ToList()));
                 if (DOhader.Count() > 0)
                 {
                     foreach (var item in DOhader)
                     {
-                        var DoDetail = await Task.Run(() => (xService.DeliveryOrderDetails.Where(x => x.OrderNo == item.OrderNo).ToList()));
+                        var DoDetail = await Task.Run(() => (xService.DeliveryOrderDetails.Where(x => x.DoNo == item.OrderNo).ToList()));
 
                         domodelsummary sum = new domodelsummary()
                         {
@@ -262,9 +262,9 @@ namespace IntergrationA_Update.Services.Masterdetails
         {
             try
             {
-               
+
                 var DOHeader = await Task.Run(() => (xService.DeliveryOrderHeader.Where(x => x.DoNo == filter).FirstOrDefault()));
-                var DODetail = await Task.Run(() => (xService.DeliveryOrderDetails.Where(x => x.OrderNo== DOHeader.DoNo).ToList()));
+                var DODetail = await Task.Run(() => (xService.DeliveryOrderDetails.Where(x => x.DoNo == DOHeader.DoNo).ToList()));
                 if (DOHeader != null && DODetail != null)
                 {
                     domodelsummary sum = new domodelsummary()
@@ -273,7 +273,7 @@ namespace IntergrationA_Update.Services.Masterdetails
                         doheader = DOHeader
                     };
 
-                    
+
                     var hjsondata = JsonConvert.SerializeObject(sum);
                     //var jsonresult = JsonConvert.DeserializeObject<domodelsummary>(hjsondata);
                     return hjsondata;
@@ -292,22 +292,24 @@ namespace IntergrationA_Update.Services.Masterdetails
 
         }
 
-        public async Task<bool> postdo(domodel.domodelsummary domodelsummary)
+        public async Task<bool> postdo(domodel.deliveryOrder domodelsummary)
         {
             bool res = false;
             try
             {
 
-                await xService.DeliveryOrderDetails.AddRangeAsync(domodelsummary.dodetails);
-                await xService.DeliveryOrderHeader.AddAsync(domodelsummary.doheader);
+                foreach (var item in domodelsummary.deliveryorder)
+                {
+                    await xService.DeliveryOrderDetails.AddRangeAsync(item.dodetails);
+                    await xService.DeliveryOrderHeader.AddAsync(item.doheader);
+                }
                 await xService.SaveChangesAsync();
                 res = true;
                 return res;
 
             }
-            catch (Exception ex)
-            {
-                //log.LogError(ex.Message + ex.StackTrace);
+            catch(Exception ex)
+            {                
                 return res;
             }
         }

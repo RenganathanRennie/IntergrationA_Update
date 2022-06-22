@@ -20,6 +20,6 @@ namespace IntergrationA_Update.Services.Masterdetails
         Task<string> getdo(DateTime filter,DateTime filter2);
         Task<string> getdo(string filter);       
 
-          Task<bool> postdo(domodelsummary domodelsummary)  ; 
+          Task<bool> postdo(deliveryOrder domodelsummary)  ; 
     }
 }

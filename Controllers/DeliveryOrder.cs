@@ -74,20 +74,21 @@ namespace WebApi.Controllers
         [HttpPost]
         [Authorize]
         [Route("PostDO")]
-        public async Task<IActionResult> PostDo([FromBody] List<domodelsummary> deliveryOrder)
+        public async Task<IActionResult> PostDo([FromBody]deliveryOrder deliveryOrder)
         {
             try
             {
                // var getstringfrombody = domodelsummary.GetRawText();
-domodelsummary domodelsummary=null;
+
                // var dm = JsonConvert.DeserializeObject<domodelsummary>(getstringfrombody);
-                if (domodelsummary != null)
+                if (deliveryOrder != null)
                 {
 
                     if (this.ModelState.IsValid)
                     {
+                        
                         //DateTime time =DateTime.ParseExact(dateTime,"dd-MM-yyyy", new CultureInfo("en-US"));
-                        var result = await objgetmasterdata.postdo(domodelsummary);
+                        var result = await objgetmasterdata.postdo(deliveryOrder);
                         // var result = false;
                         if (result)
                         {
