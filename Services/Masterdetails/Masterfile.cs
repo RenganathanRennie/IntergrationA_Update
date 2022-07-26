@@ -5,13 +5,15 @@ using System.Threading.Tasks;
 using IntergrationA.Models;
 using IntergrationA.Services.Masterdetails;
 using IntergrationA.Services.TaskService;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Data;
 using WebApi;
 using static IntergrationA.Models.barcodemodel;
 using static IntergrationA.Models.categorymodel;
 using static IntergrationA.Models.inventorymodel;
-
+using static IntergrationA_Update.Models.somodel;
 
 namespace IntergrationA.Services.Masterdetails
 {
@@ -309,6 +311,34 @@ namespace IntergrationA.Services.Masterdetails
                 res = false;
             }
             return res;
+        }
+        public async Task<bool> getsofromshopify(SalesOrderHeader soh, List<SalesOrderDetails> sod)
+        {
+            bool res = false;
+            try
+            {
+                var isorderavailble = xService.SalesOrderHeader.Where(o => o.SalesOrderNo ==  soh.SalesOrderNo).FirstOrDefault(); 
+                if (isorderavailble == null)
+                {
+                     xService.SalesOrderHeader.Add(soh);
+                     xService.SalesOrderDetails.AddRange(sod);
+                    await xService.SaveChangesAsync();
+                    res = true;
+                }
+                else
+                {
+                    res = true;
+                }
+                return res;
+
+            }
+            catch (Exception ex)
+            {
+                log.LogError(soh.SalesOrderNo+" so error " + ex.InnerException is null ? "inner excption null " : ex.InnerException.Message);
+                log.LogError("so save error " + ex.Message);
+                return res;
+
+            }
         }
     }
 }

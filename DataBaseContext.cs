@@ -6,7 +6,8 @@ using static IntergrationA.Models.categorymodel;
 using static IntergrationA.Models.inventorymodel;
 using static IntergrationA_Update.Models.domodel;
 using static IntergrationA_Update.Models.somodel;
-
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace WebApi
 {
     public class DataBaseContext : DbContext
@@ -36,9 +37,14 @@ namespace WebApi
         {
             modelBuilder.Entity<Barcode>()
                 .HasKey(c => new { c.seq, c.U8CUSTDEF_0001_E001_F003 });
-
                 //  modelBuilder.Entity<DeliveryOrderDetails>()
                 // .HasKey(c => new { c.DoNo, c.ProductId });
+
+                //  modelBuilder.Entity<SalesOrderDetails>()
+                // .HasKey(c => new { c.slno, c.ProductId,c.SalesOrderNo });
+
+                modelBuilder.Entity<SalesOrderDetails>()
+                .HasKey(c => new { c.slno});
         }
     }
 }

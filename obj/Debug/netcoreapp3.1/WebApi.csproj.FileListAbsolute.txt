@@ -317,3 +317,6 @@ C:\Users\renganathan.baskaran\Downloads\IntergrationA_Update\IntergrationA_Updat
 C:\Users\renganathan.baskaran\Downloads\IntergrationA_Update\IntergrationA_Update\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
 C:\Users\renganathan.baskaran\Downloads\IntergrationA_Update\IntergrationA_Update\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\renganathan.baskaran\Downloads\IntergrationA_Update\IntergrationA_Update\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Users\renganathan.baskaran\Downloads\IntergrationA_Update\IntergrationA_Update\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Http.dll
+C:\Users\renganathan.baskaran\Downloads\IntergrationA_Update\IntergrationA_Update\bin\Debug\netcoreapp3.1\ShopifySharp.dll
+C:\Users\renganathan.baskaran\Downloads\IntergrationA_Update\IntergrationA_Update\bin\Debug\netcoreapp3.1\System.Runtime.CompilerServices.Unsafe.dll

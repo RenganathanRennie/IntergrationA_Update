@@ -6,6 +6,7 @@ using static IntergrationA.Models.barcodemodel;
 using static IntergrationA.Models.categorymodel;
 using static IntergrationA.Models.inventorymodel;
 using static IntergrationA_Update.Models.domodel;
+using static IntergrationA_Update.Models.somodel;
 
 namespace IntergrationA_Update.Services.Masterdetails
 {
@@ -21,5 +22,6 @@ namespace IntergrationA_Update.Services.Masterdetails
         Task<string> getdo(string filter);       
 
           Task<bool> postdo(deliveryOrder domodelsummary)  ; 
+          
     }
 }

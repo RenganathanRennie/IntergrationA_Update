@@ -50,11 +50,11 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[5.0.12, )"
+              "version": "[5.0.17, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[5.0.12, )"
+              "version": "[5.0.17, )"
             },
             "RestClient.Net": {
               "target": "Package",
@@ -83,6 +83,10 @@
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[6.7.1, )"
+            },
+            "shopifysharp": {
+              "target": "Package",
+              "version": "[5.15.0, )"
             }
           },
           "imports": [

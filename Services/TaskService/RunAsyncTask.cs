@@ -17,6 +17,12 @@ using Newtonsoft.Json;
 using IntergrationA.Services.Masterdetails;
 using static IntergrationA.Models.barcodemodel;
 using static IntergrationA.Models.categorymodel;
+using ShopifySharp;
+using System.Collections.Generic;
+using ShopifySharp.Filters;
+using static WebApi.Models.shopify_model;
+using System.Text.RegularExpressions;
+using static IntergrationA_Update.Models.somodel;
 
 namespace IntergrationA.Services.TaskService
 {
@@ -40,9 +46,151 @@ namespace IntergrationA.Services.TaskService
                  await GetInventoryfile(_log);
                  await Getcustomerfile(_log);
                  await GetBarcodefile(_log);
-                 await GetCategoryfile(_log);
+                 await GetCategoryfile(_log);       
 
-                await Task.Delay(20000000);
+                await getshopifyorder();
+                await Task.Delay(10000);
+            }
+        }
+
+        private async Task getshopifyorder()
+        {
+            string refsono = "";
+            //int count =0;
+            try
+            {
+
+                var allOrders = new List<Order>();
+                var service = new OrderService("toyogo-supermart.myshopify.com", "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");
+                var orders = await service.ListAsync();
+                var orderdes = JsonConvert.SerializeObject(orders.Items);
+                var myDeserializedClass = JsonConvert.DeserializeObject<List<MyArray>>(orderdes);
+
+                double strgstamount = 0;
+                foreach (var shopifyrawlist in myDeserializedClass)
+                {
+
+
+                    int count = 0;
+                    string checkorderexists = "";
+                    List<SalesOrderDetails> lstsalesOrderDetails = new List<SalesOrderDetails>();
+                    refsono = shopifyrawlist.order_number.ToString();
+
+                    using (var scope = _scopeFactory.CreateScope())
+                    {
+                        var xService = scope.ServiceProvider.GetService<DataBaseContext>();
+                        checkorderexists = Convert.ToString(xService.SalesOrderHeader.Where(o => o.SalesOrderNo == refsono).Select(op=>op.SalesOrderNo).FirstOrDefault());
+                    }
+                    if (checkorderexists == "" || checkorderexists==null)
+                    {
+                        SalesOrderHeader Soheader = new SalesOrderHeader
+                        {
+                            SalesOrderType = "Shopify",
+                            SalesOrderNo = shopifyrawlist.order_number.ToString(),
+                            SalesOrderDate = shopifyrawlist.created_at,
+                            InvoiceNo = "",
+                            InvoiceDate = DateTime.Now.Date,
+                            DoNo = "",
+                            DoDate = DateTime.Now.Date,
+                            CustomerId = shopifyrawlist.customer.id.ToString(),
+                            Customer_FirstName = shopifyrawlist.shipping_address is null ? "" : shopifyrawlist.shipping_address.first_name,
+                            Customer_LastName = shopifyrawlist.shipping_address is null ? "" : shopifyrawlist.shipping_address.last_name,
+                            ShippingCode = shopifyrawlist.shipping_address is null ? "" : Convert.ToString(shopifyrawlist.shipping_address.id),
+                            ShippingAddress1 = shopifyrawlist.shipping_address is null ? "" : shopifyrawlist.shipping_address.address1,
+                            ShippingAddress2 = shopifyrawlist.shipping_address is null ? "" : shopifyrawlist.shipping_address.address2,
+                            ShippingAddress3 = "",
+                            ShippingZipcode = shopifyrawlist.shipping_address is null ? "" : shopifyrawlist.shipping_address.zip,
+                            ShippingPhone = shopifyrawlist.shipping_address is null ? "" : shopifyrawlist.shipping_address.phone,
+                            ShippingCost = shopifyrawlist.total_shipping_price_set.shop_money == null ? 0 : shopifyrawlist.total_shipping_price_set.shop_money.amount,
+                            // ShippingMode = "",
+                            Total = shopifyrawlist.total_price,
+                            DiscountType = "",
+                            DiscountPer = 0,
+                            DiscountAmount = shopifyrawlist.current_total_discounts,
+                            TotalBillDiscount = shopifyrawlist.total_discounts,
+                            TotalItemDiscount = 0,
+                            SubTotal = shopifyrawlist.subtotal_price,
+                            GSTType = "",
+                            GSTPer = 7,
+                            GSTAmount = shopifyrawlist.total_tax,
+                            NetTotal = shopifyrawlist.subtotal_price,
+                            Currency = shopifyrawlist.currency,
+                            CurrencyRate = 1,
+                            PaidAmount = 0,
+                            Due = 0,
+                            Change = 0,
+                            Remarks = "",
+                            PaymentNo = "",
+                            PaymentType = "",
+                            PaymentMode = "",
+                            PaymentNotes = "",
+                            CreatedBy = shopifyrawlist.user_id is null ? "NA" : shopifyrawlist.user_id.ToString(),
+                            CreatedDate = shopifyrawlist.created_at,
+                            UpdatedBy = "",
+                            UpdatedDate = DateTime.Now.Date,
+                            IsDeleted = 0
+                        };
+
+                        foreach (var line_items in shopifyrawlist.line_items)
+                        {
+                            count = count + 1;
+                            foreach (var taxitem in shopifyrawlist.tax_lines)
+                            {
+                                strgstamount = taxitem.price;
+                            }
+                            SalesOrderDetails salesOrderDetails = new SalesOrderDetails
+                            {
+
+                               // slno = count,
+                               slno=0,
+                                SalesOrderNo = Convert.ToString(shopifyrawlist.order_number),
+                                ProductId = Convert.ToString(line_items.product_id),
+                                ProductName = Convert.ToString(line_items.title),
+                                UnitId = Convert.ToString(line_items.product_id),
+                                Quantity = line_items.quantity,
+                                Price = Convert.ToDecimal(line_items.price),
+                                Discount = Convert.ToDecimal(line_items.total_discount),
+                                DiscountPer = 0,
+                                Total = Convert.ToDecimal(line_items.quantity * line_items.price),
+                                Remarks = "",
+                                GSTType = "",
+                                GSTAmount = Convert.ToDecimal(strgstamount),
+                                CreatedBy = shopifyrawlist.user_id is null ? "NA" : shopifyrawlist.user_id.ToString(),
+                                CreatedDate = shopifyrawlist.created_at,
+                                UpdatedBy = "",
+                                UpdatedDate = DateTime.Now.Date,
+                                IsDeleted = false
+
+                            };
+                            lstsalesOrderDetails.Add(salesOrderDetails);
+                        }
+                        using (var scope = _scopeFactory.CreateScope())
+
+                        {
+                            var xService = scope.ServiceProvider.GetService<DataBaseContext>();
+
+                            IMasterfile sim = new Masterfile(_log, xService);
+                            var res = await sim.getsofromshopify(Soheader, lstsalesOrderDetails);
+                            if (res)
+                            {
+                                _log.LogInformation("shopify order " + refsono + " Saved Success");
+                            }
+                            else
+                            {
+                                _log.LogInformation("shopify order " + refsono + " Error in saving ");
+                            }
+
+                        }
+                    }
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                _log.LogInformation("shopify order " + refsono + " Error in saving ");
+
             }
         }
 

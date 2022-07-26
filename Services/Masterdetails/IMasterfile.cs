@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using static IntergrationA.Models.barcodemodel;
 using static IntergrationA.Models.categorymodel;
 using static IntergrationA.Models.inventorymodel;
+using static IntergrationA_Update.Models.somodel;
 
 namespace IntergrationA.Services.Masterdetails
 {
@@ -18,6 +19,7 @@ namespace IntergrationA.Services.Masterdetails
 
 
         InventoryBaseclassreturn GetInventoryBaseclass();
+        Task<bool> getsofromshopify(SalesOrderHeader soh,List<SalesOrderDetails> sod);
 
         }
 }

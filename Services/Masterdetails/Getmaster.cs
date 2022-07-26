@@ -313,5 +313,7 @@ namespace IntergrationA_Update.Services.Masterdetails
                 return res;
             }
         }
+
+       
     }
 }
