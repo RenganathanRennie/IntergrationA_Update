@@ -46,7 +46,7 @@ namespace IntergrationA.Services.TaskService
                  await GetInventoryfile(_log);
                  await Getcustomerfile(_log);
                  await GetBarcodefile(_log);
-                 await GetCategoryfile(_log);       
+                 await GetCategoryfile(_log);      
 
                 await getshopifyorder();
                 await Task.Delay(10000);
