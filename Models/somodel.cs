@@ -22,7 +22,7 @@ namespace IntergrationA_Update.Models
         }
         public class SalesOrderDetails
         {  [DatabaseGenerated(DatabaseGeneratedOption.Identity)]                 
-            public Int64 slno { get; set; }
+            public Int64 Id { get; set; }
             [MaxLength(100)]
             [Required(ErrorMessage = "SalesOrder No is required")]
             public string SalesOrderNo { get; set; }

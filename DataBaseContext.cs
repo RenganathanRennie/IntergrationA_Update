@@ -44,7 +44,7 @@ namespace WebApi
                 // .HasKey(c => new { c.slno, c.ProductId,c.SalesOrderNo });
 
                 modelBuilder.Entity<SalesOrderDetails>()
-                .HasKey(c => new { c.slno});
+                .HasKey(c => new { c.Id});
         }
     }
 }
