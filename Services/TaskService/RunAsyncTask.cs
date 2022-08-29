@@ -65,7 +65,7 @@ namespace IntergrationA.Services.TaskService
 
                 var allOrders = new List<Order>();
                 var service = new OrderService("toyogo-supermart.myshopify.com", "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");
-                var orders = await service.ListAsync
+                var orders = await service.ListAsync();
                 var orderdes = JsonConvert.SerializeObject(orders.Items);
                 var myDeserializedClass = JsonConvert.DeserializeObject<List<MyArray>>(orderdes);
 
