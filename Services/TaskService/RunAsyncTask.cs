@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using WebApi;
@@ -31,11 +32,13 @@ namespace IntergrationA.Services.TaskService
         public ILogger<RunAsyncTask> _log;
 
         private readonly IServiceScopeFactory _scopeFactory;
+        public IConfiguration config;
         HttpClient client = new HttpClient();
-        public RunAsyncTask(ILogger<RunAsyncTask> _log, IServiceScopeFactory _scopeFactory)
+        public RunAsyncTask(ILogger<RunAsyncTask> _log, IServiceScopeFactory _scopeFactory,IConfiguration config)
         {
             this._log = _log;
             this._scopeFactory = _scopeFactory;
+            this.config=config;
 
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -43,10 +46,10 @@ namespace IntergrationA.Services.TaskService
             while (!stoppingToken.IsCancellationRequested)
             {
                 _log.LogInformation("Loop ran at " + DateTime.Now.ToString());
-                 await GetInventoryfile(_log);
-                 await Getcustomerfile(_log);
-                 await GetBarcodefile(_log);
-                 await GetCategoryfile(_log);      
+                // await GetInventoryfile(_log);
+                //  await Getcustomerfile(_log);
+                //  await GetBarcodefile(_log);
+                //  await GetCategoryfile(_log);      
 
                 await getshopifyorder();
                 await Task.Delay(10000);
@@ -79,9 +82,9 @@ namespace IntergrationA.Services.TaskService
                     using (var scope = _scopeFactory.CreateScope())
                     {
                         var xService = scope.ServiceProvider.GetService<DataBaseContext>();
-                        checkorderexists = Convert.ToString(xService.SalesOrderHeader.Where(o => o.SalesOrderNo == refsono).Select(op=>op.SalesOrderNo).FirstOrDefault());
+                        checkorderexists = Convert.ToString(xService.SalesOrderHeader.Where(o => o.SalesOrderNo == refsono).Select(op => op.SalesOrderNo).FirstOrDefault());
                     }
-                    if (checkorderexists == "" || checkorderexists==null)
+                    if (checkorderexists == "" || checkorderexists == null)
                     {
                         SalesOrderHeader Soheader = new SalesOrderHeader
                         {
@@ -92,7 +95,8 @@ namespace IntergrationA.Services.TaskService
                             InvoiceDate = DateTime.Now.Date,
                             DoNo = "",
                             DoDate = DateTime.Now.Date,
-                            CustomerId = shopifyrawlist.customer.id.ToString(),
+                            //CustomerId = shopifyrawlist.customer.id.ToString(),
+                            CustomerId = (customercodebypaymode(shopifyrawlist.payment_gateway_names)) == "NA" ? shopifyrawlist.customer.id.ToString() : customercodebypaymode(shopifyrawlist.payment_gateway_names),
                             Customer_FirstName = shopifyrawlist.shipping_address is null ? "" : shopifyrawlist.shipping_address.first_name,
                             Customer_LastName = shopifyrawlist.shipping_address is null ? "" : shopifyrawlist.shipping_address.last_name,
                             ShippingCode = shopifyrawlist.shipping_address is null ? "" : Convert.ToString(shopifyrawlist.shipping_address.id),
@@ -141,10 +145,10 @@ namespace IntergrationA.Services.TaskService
                             SalesOrderDetails salesOrderDetails = new SalesOrderDetails
                             {
 
-                               // slno = count,
-                               slno=0,
+                                // slno = count,
+                                Id = 0,
                                 SalesOrderNo = Convert.ToString(shopifyrawlist.order_number),
-                                ProductId = Convert.ToString(line_items.product_id),
+                                ProductId = Convert.ToString(line_items.sku),
                                 ProductName = Convert.ToString(line_items.title),
                                 UnitId = Convert.ToString(line_items.product_id),
                                 Quantity = line_items.quantity,
@@ -194,6 +198,39 @@ namespace IntergrationA.Services.TaskService
             }
         }
 
+        private string customercodebypaymode(List<string> payment_gateway_names)
+        { 
+            var res = "";
+            var switc = payment_gateway_names[0].ToString();
+             _log.LogInformation("Paymode " + switc);
+            switch (switc.ToUpper())
+            {
+                case "HITPAY":
+                    {
+                        res = config.GetSection("HITPAY").Value;
+                        break;
+                    }
+
+                case "SHOPIFY_PAYMENTS":
+                    {
+                        res = config.GetSection("SHOPIFY_PAYMENTS").Value;
+                        break;
+                    }
+                case "PLEASE PAY WITHIN 2HRS (UEN: 199401745C)":
+                    {
+                        res = config.GetSection("CASH").Value;
+                        break;
+                    }
+                default:
+                    {
+                        res = "NA";
+                        break;
+                    }
+            }
+
+            return res;
+        }
+
         private async Task GetCategoryfile(ILogger<RunAsyncTask> log)
         {
             try
@@ -236,6 +273,8 @@ namespace IntergrationA.Services.TaskService
             }
 
         }
+
+      
 
         public async Task<string> getjsondata(string filter)
         {
